@@ -1,0 +1,37 @@
+{
+  "name": "nodejs-boilerplate",
+  "version": "1.0.0",
+  "description": "Boilerplate for NodeJS based projects",
+  "main": "start.js",
+  "scripts": {
+    "start-docker": "node start.js",
+    "start": "nodemon -r dotenv/config src/start.js",
+    "start-dev": "nodemon -r dotenv/config src/start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/codeboilerplates/nodejs.git"
+  },
+  "author": "Alexandru Hogea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/codeboilerplates/nodejs/issues"
+  },
+  "homepage": "https://gitlab.com/codeboilerplates/nodejs#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "docker-secret": "^1.1.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^4.4.1",
+    "http-errors": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "log-timestamp": "^0.3.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
