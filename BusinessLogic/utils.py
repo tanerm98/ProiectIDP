@@ -100,7 +100,7 @@ def comment_on_pr(auth_token, comment, repo_owner, repo_name, pr_number):
             REPO_NAME=repo_name,
             PR_NUMBER=pr_number
         )
-        subprocess.Popen(command, shell=True).wait()
+        subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).wait()
 
     except Exception as e:
         logging.error("Commenting failed with error '{ERROR}'".format(ERROR=e))

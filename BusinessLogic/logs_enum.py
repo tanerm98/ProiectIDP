@@ -8,3 +8,5 @@ class Logs(Enum):
 
     LAUNCHED_1 = "SpringBoard: (SpringBoard) [com.apple.SpringBoard:AppSwitcher] SBMainWorkspaceApplicationSceneLayoutElementViewController-sceneID"
     LAUNCHED_2 = "did end transition to visible YES"
+
+    TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
