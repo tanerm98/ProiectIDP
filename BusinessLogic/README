@@ -14,7 +14,6 @@
         # Run script
             python3 measure_performance.py \
                 --bundle_id TODO \
-                --app_name TODO \
                 --app_path TODO \
                 --repo_github_token TODO \
                 --repo_owner TODO \
