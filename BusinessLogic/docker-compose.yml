@@ -1,0 +1,7 @@
+version: '3.3'
+
+services:
+  measure_performance_py:
+    build: .
+    ports:
+      - "5001:5001"
