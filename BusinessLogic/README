@@ -3,7 +3,7 @@
 
     Usage:
     ```
-        # pwd = Licenta/BusinessLogic
+        # pwd = BusinessLogic
 
         # Venv
             python3 -m venv venv
