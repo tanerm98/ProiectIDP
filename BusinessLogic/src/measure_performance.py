@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 
 import argparse
+import json
 import os
 import subprocess
 import time
@@ -18,17 +19,18 @@ from logs_enum import Logs
 
 GDRIVE_API_CREDENTIALS_JSON = "gdrive_api_service_credentials.json"
 APP_ARCHIVE = "app.zip"
+RESULTS_FILE = "results.json"
 
 TIMEOUT = 10
 
 LAUNCHES = "LAUNCHES"
 DEVICE = "DEVICE"
-LAUNCH_TYPE = "LAUNCH_TYPE"
-APP_SIZE = "APP_SIZE"
-LAUNCH_DURATION = "LAUNCH_DURATION"
-MEMORY_USAGE = "MEMORY_USAGE"
-INSTALL_LAUNCH_DURATION = "INSTALL_LAUNCH_DURATION"
-INSTALL_MEMORY_USAGE = "INSTALL_MEMORY_USAGE"
+LAUNCH_TYPE = "LAUNCH TYPE"
+APP_SIZE = "APP SIZE"
+LAUNCH_DURATION = "LAUNCH DURATION"
+MEMORY_USAGE = "MEMORY USAGE"
+INSTALL_LAUNCH_DURATION = "FIRST LAUNCH AFTER INSTALL - DURATION"
+INSTALL_MEMORY_USAGE = "FIRST LAUNCH AFTER INSTALL - MEMORY USAGE"
 
 
 def parse_args():
@@ -85,7 +87,7 @@ def prepare_simulator(simulator_name):
     :param simulator_name: the simulator name to prepare (ex: iPhone 8, iPhone 11)
     :return: True if everything worked fine - False instead
     """
-    logging.info("Preparing simulator {SIMULATOR}...".format(SIMULATOR=simulator_name))
+    logging.info("Preparing simulator '{SIMULATOR}'...".format(SIMULATOR=simulator_name))
 
     try:
         subprocess.Popen(
@@ -94,10 +96,10 @@ def prepare_simulator(simulator_name):
         ).wait()
 
     except Exception as e:
-        logging.error("Preparing the simulator {SIMULATOR} failed with error '{ERROR}'".format(SIMULATOR=simulator_name, ERROR=e))
+        logging.error("Preparing the simulator '{SIMULATOR}' failed with error '{ERROR}'".format(SIMULATOR=simulator_name, ERROR=e))
         return False
 
-    logging.info("Simulator {SIMULATOR} clean!".format(SIMULATOR=simulator_name))
+    logging.info("Simulator '{SIMULATOR}' clean!".format(SIMULATOR=simulator_name))
     return True
 
 
@@ -107,7 +109,7 @@ def boot_simulator(simulator_name):
     :param simulator_name: the simulator name to boot (ex: iPhone 8, iPhone 11)
     :return: True if everything worked fine - False instead
     """
-    logging.info("Booting simulator {SIMULATOR}...".format(SIMULATOR=simulator_name))
+    logging.info("Booting simulator '{SIMULATOR}'...".format(SIMULATOR=simulator_name))
 
     try:
         subprocess.Popen(
@@ -160,7 +162,7 @@ def reboot_simulator(simulator_name):
     :param simulator_name: name of simulator to be rebooted
     :return: True if everything worked fine - False instead
     """
-    logging.info("Rebooting simulator {SIMULATOR}...".format(SIMULATOR=simulator_name))
+    logging.info("Rebooting simulator '{SIMULATOR}'...".format(SIMULATOR=simulator_name))
 
     r1 = shutdown_simulators()
     r2 = boot_simulator(simulator_name)
@@ -182,7 +184,7 @@ def get_app(args):
 
     try:
         if args.app_path is not None and os.path.exists(args.app_path):
-            logging.info("Getting APP from local path {PATH}...".format(PATH=args.app_path))
+            logging.info("Getting APP from local path '{PATH}'...".format(PATH=args.app_path))
             app_path = args.app_path
 
         elif args.file_id is not None:
@@ -195,11 +197,11 @@ def get_app(args):
             logging.error("No valid app path provided.")
             return None
 
-        logging.info("App retrieved successfuly: {PATH}".format(PATH=app_path))
+        logging.info("App retrieved successfuly: '{PATH}'".format(PATH=app_path))
         return app_path
 
     except Exception as e:
-        logging.error("Error getting the app: {ERROR}.".format(ERROR=e))
+        logging.error("Error getting the app: '{ERROR}'.".format(ERROR=e))
         return None
 
 
@@ -224,7 +226,7 @@ def compute_app_size(app_path):
         logging.info("Size of application: [{SIZE} MB]".format(SIZE=app_size))
 
     except Exception as e:
-        logging.error("Error computing the app size: {ERROR}.".format(ERROR=e))
+        logging.error("Error computing the app size: '{ERROR}'.".format(ERROR=e))
         return None
 
     logging.info("App size computed successfuly!")
@@ -238,7 +240,7 @@ def install_app(simulator_name, app_path):
     :param app_path: path to the iOS app file
     :return: True if everything worked fine - False instead
     """
-    logging.info("Installing app {APP_PATH} on simulator {SIMULATOR}...".format(APP_PATH=app_path, SIMULATOR=simulator_name))
+    logging.info("Installing app {APP_PATH} on simulator '{SIMULATOR}'...".format(APP_PATH=app_path, SIMULATOR=simulator_name))
 
     try:
         subprocess.Popen(
@@ -262,7 +264,7 @@ def launch_app(simulator_name, bundle_id):
     :param bundle_id: bundle ID of the iOS app file
     :return: PID of launched application - None if something fails
     """
-    logging.info("Launching app {BUNDLE_ID} on simulator {SIMULATOR}...".format(BUNDLE_ID=bundle_id, SIMULATOR=simulator_name))
+    logging.info("Launching app {BUNDLE_ID} on simulator '{SIMULATOR}'...".format(BUNDLE_ID=bundle_id, SIMULATOR=simulator_name))
 
     try:
         p = subprocess.Popen(
@@ -292,7 +294,7 @@ def terminate_app(simulator_name, bundle_id):
     :param bundle_id: bundle ID of the iOS app file
     :return: True if everything worked fine - False instead
     """
-    logging.info("Terminating app {BUNDLE_ID} on simulator {SIMULATOR}...".format(BUNDLE_ID=bundle_id, SIMULATOR=simulator_name))
+    logging.info("Terminating app {BUNDLE_ID} on simulator '{SIMULATOR}'...".format(BUNDLE_ID=bundle_id, SIMULATOR=simulator_name))
 
     try:
         subprocess.Popen(
@@ -352,7 +354,7 @@ def launch_and_terminate_app(simulator_name, bundle_id):
         time.sleep(2)
 
     except Exception as e:
-        logging.error("Launching app failed with error {ERROR}".format(ERROR=e))
+        logging.error("Launching app failed with error '{ERROR}'".format(ERROR=e))
         return None
 
     return memory_usage
@@ -381,7 +383,7 @@ def run_launches(simulator_name, launch_type, launch_nr, bundle_id):
         memory_usage = round(memory_usage / launch_nr, 2)
 
     except Exception as e:
-        logging.error("Running launches failed with error {ERROR}".format(ERROR=e))
+        logging.error("Running launches failed with error '{ERROR}'".format(ERROR=e))
         return None
 
     logging.info("Launches executed successfuly!")
@@ -414,11 +416,11 @@ def get_device_logs(simulator_name, bundle_id):
                 filtered_logs.append(log)
 
         if not filtered_logs:
-            logging.error("No relevant logs found! Showing found logs: {LOGS}".format(LOGS=logs))
+            logging.error("No relevant logs found! Showing found logs: '{LOGS}'".format(LOGS=logs))
             raise Exception("No relevant logs found!")
 
     except Exception as e:
-        logging.error("Failed to get logs with error: {ERROR}".format(ERROR=e))
+        logging.error("Failed to get logs with error: '{ERROR}'".format(ERROR=e))
         return None
 
     logging.info("Logs retrieved successfuly!")
@@ -463,13 +465,13 @@ def get_launch_duration_from_logs(logs, launch_nr):
                     break
 
             else:
-                logging.error("Logs are not in order! Skipping computing results for this run. Showing found logs: {LOGS}".format(LOGS=logs))
+                logging.error("Logs are not in order! Skipping computing results for this run. Showing found logs: '{LOGS}'".format(LOGS=logs))
                 raise Exception("Logs are not in order!")
 
         average_launch_duration = int(average_launch_duration / launch_nr)
 
     except Exception as e:
-        logging.error("Failed getting launch duration logs with error {ERROR}!".format(ERROR=e))
+        logging.error("Failed getting launch duration logs with error '{ERROR}'!".format(ERROR=e))
         return None
 
     logging.info("Timestamps retrieved successfuly!")
@@ -491,10 +493,10 @@ def measure_performance_at_first_launch(simulator_name, bundle_id):
         launch_duration = get_launch_duration_from_logs(logs, 1)
 
     except Exception as e:
-        logging.error("Measuring performance at first launch failed with error {ERROR}".format(ERROR=e))
+        logging.error("Measuring performance at first launch failed with error '{ERROR}'".format(ERROR=e))
         return None, None
 
-    logging.info("[RESULTS] Launch duration: [{DURATION}]ms;\tMemory usage: [{MEMORY}]MB".format(
+    logging.info("[RESULTS] Launch duration: [{DURATION} ms];\tMemory usage: [{MEMORY} MB]".format(
         DURATION=launch_duration,
         MEMORY=memory_usage)
     )
@@ -524,10 +526,10 @@ def measure_average_performance_of_launches(simulator_name, launch_type, launch_
         }
 
     except Exception as e:
-        logging.error("Measuring average performance failed with error {ERROR}".format(ERROR=e))
+        logging.error("Measuring average performance failed with error '{ERROR}'".format(ERROR=e))
         return None
 
-    logging.info("[RESULTS] Average launch duration: [{DURATION}]ms;\tAverage memory usage: [{MEMORY}]MB".format(
+    logging.info("[RESULTS] Average launch duration: [{DURATION} ms];\tAverage memory usage: [{MEMORY} MB]".format(
         DURATION=launch_duration,
         MEMORY=memory_usage)
     )
@@ -542,6 +544,7 @@ def run_tests(args):
     """
     TEST_RESULTS = {
         LAUNCHES: [],
+        APP_SIZE: None,
         INSTALL_LAUNCH_DURATION: None,
         INSTALL_MEMORY_USAGE: None
     }
@@ -562,7 +565,7 @@ def run_tests(args):
     for simulator_name in args.device:
         try:
             logging.info("----------------------------------------------------------------------------------------------------")
-            logging.info("Running tests on device {DEVICE}:".format(DEVICE=simulator_name))
+            logging.info("Running tests on simulator '{DEVICE}':".format(DEVICE=simulator_name))
 
             prepare_simulator(simulator_name)
             boot_simulator(simulator_name)
@@ -581,13 +584,13 @@ def run_tests(args):
                     launch_data = measure_average_performance_of_launches(simulator_name, launch_type, args.launch_nr, args.bundle_id)
                     TEST_RESULTS[LAUNCHES].append(launch_data)
                 except Exception as e:
-                    logging.error("Testing failed for {LAUNCH_TYPE} launch type with error {ERROR}. Skipping...".format(ERROR=e, LAUNCH_TYPE=launch_type))
+                    logging.error("Testing failed for '{LAUNCH_TYPE}' launch type with error '{ERROR}'. Skipping...".format(ERROR=e, LAUNCH_TYPE=launch_type))
 
             shutdown_simulators()
-            logging.info("Finished running tests on device {DEVICE}".format(DEVICE=simulator_name))
+            logging.info("Finished running tests on device '{DEVICE}'".format(DEVICE=simulator_name))
 
         except Exception as e:
-            logging.error("Testing failed for {SIMULATOR} device with error {ERROR}. Skipping...".format(ERROR=e, SIMULATOR=simulator_name))
+            logging.error("Testing failed for '{SIMULATOR}' device with error '{ERROR}'. Skipping...".format(ERROR=e, SIMULATOR=simulator_name))
 
     return TEST_RESULTS
 
@@ -642,7 +645,7 @@ def create_test_summary(args, TEST_RESULTS):
         test_summary += "----------------------------------------------------\n"
 
     except Exception as e:
-        logging.error("Creating test summary failed with error {ERROR}".format(ERROR=e))
+        logging.error("Creating test summary failed with error '{ERROR}'".format(ERROR=e))
         return None
 
     logging.info(test_summary)
@@ -660,13 +663,33 @@ def report_tests(args, test_summary):
             comment_on_pr(args.repo_github_token, test_summary, args.repo_owner, args.repo_name, args.pr_number)
 
     except Exception as e:
-        logging.error("Posting test report on PR failed with error {ERROR}".format(ERROR=e))
+        logging.error("Posting test report on PR failed with error '{ERROR}'".format(ERROR=e))
+
+
+def write_results_to_file(test_results_dict, results_json_file):
+    """
+    Writes test results to JSON file, to be read by FLASK app
+    :param test_results_dict: dictionary with test data
+    :param results_json_file: file to write to
+    """
+    try:
+        logging.info("Removing previous version of results file...")
+        if os.path.exists(results_json_file):
+            os.remove(results_json_file)
+    except Exception as e:
+        logging.error("Deleting file failed with error '{ERROR}'".format(ERROR=e))
+
+    try:
+        logging.info("Writing test results to JSON file '{FILE}'...".format(FILE=results_json_file))
+        with open(results_json_file, 'w', encoding='utf-8') as results_json:
+            json.dump(test_results_dict, results_json, ensure_ascii=False, indent=4)
+    except Exception as e:
+        logging.error("Writing test results to JSON file '{FILE}' failed with error '{ERROR}'".format(FILE=results_json_file, ERROR=e))
 
 
 def main():
     """
     Handles all the business logic
-    :return: test results in dictionary/JSON format or None if error occurred
     """
     logging.info("Testing iOS application performance metrics: application size, launch duration and RAM memory usage!")
 
@@ -674,14 +697,13 @@ def main():
         args = parse_args()
 
         TEST_RESULTS = run_tests(args)
+        write_results_to_file(TEST_RESULTS, RESULTS_FILE)
         test_summary = create_test_summary(args, TEST_RESULTS)
         report_tests(args, test_summary)
 
     except Exception as e:
-        logging.error("Testing performance of application failed with error {ERROR}".format(ERROR=e))
-        return None
+        logging.error("Testing performance of application failed with error '{ERROR}'".format(ERROR=e))
 
-    return TEST_RESULTS
 
 if __name__ == "__main__":
     main()
