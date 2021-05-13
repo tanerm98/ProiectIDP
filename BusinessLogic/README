@@ -1,7 +1,7 @@
 
     Use `python3` for these scripts.
 
-    Usage:
+    Manual usage:
     ```
         # pwd = BusinessLogic
 
@@ -12,12 +12,37 @@
             pip3 install -U pip google-api-python-client
 
         # Run script
-            python3 measure_performance.py \
+            python3 src/measure_performance.py \
                 --bundle_id TODO \
-                --app_name TODO \
                 --app_path TODO \
                 --repo_github_token TODO \
                 --repo_owner TODO \
                 --repo_name TODO \
                 --pr_number TODO
+
+        # Run app
+            python3 src/app.py
+
+            # URL: localhost:5001
+            # API URL: localhost:5001/api/run/TODO
+            # BODY:
+                {
+                    "file_id": TODO,
+                    "app_path": TODO,
+                    "device": "TODO,
+                    "launch_type": TODO,
+                    "launch_nr": TODO,
+                    "duration_limit": TODO,
+                    "memory_limit": TODO,
+                    "size_limit": TODO,
+                    "repo_github_token": TODO,
+                    "repo_owner": TODO,
+                    "repo_name": TODO,
+                    "pr_number": TODO
+                }
+    ```
+
+    Docker usage:
+    ```
+        docker-compose up [--build]
     ```

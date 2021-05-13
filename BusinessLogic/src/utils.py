@@ -84,8 +84,7 @@ def comment_on_pr(auth_token, comment, repo_owner, repo_name, pr_number):
 
     Usage: comment_on_pr("<auth_token>", "Test de comment 1", "tanerm98", "Licenta", 1)
     """
-    logging.info("Posting comment '{COMMENT}' on PR '{PR}' for repository '{REPO}'...".format(
-        COMMENT=comment,
+    logging.info("Posting comment on PR '{PR}' for repository '{REPO}'...".format(
         PR=pr_number,
         REPO=repo_name)
     )

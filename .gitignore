@@ -106,3 +106,8 @@ dist
 */**/venv/**
 venv
 *.app
+
+*/**/*.DS_Store
+.idea
+BusinessLogic/.DS_Store
+.DS_Store
