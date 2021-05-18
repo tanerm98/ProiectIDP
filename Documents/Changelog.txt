@@ -1,0 +1,101 @@
+﻿# Changelog
+All notable changes to this project will be documented in this file.
+
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+
+
+
+## [Unreleased]
+## [0.0.1] - 2021-05-09
+### Added
+* Teodor - a implementat in Python API-call-urile pentru 3rd party apps folosite:
+   * Metoda de descarcare fisier din Google Drive
+   * Metoda de a posta comment pe un Github PR
+   * Metoda de dezarhivare fisier descarcat
+* Corina - a implementat in NodeJS framework-ul pentru dezvoltat aplicatia web:
+   * autentificare cu JWT, parola, user roles
+   * conexiune la baza de date PostgreSQL
+   * utilitar de gestiune baza de date
+   * schelet pentru aplicatia web
+      * controllere
+      * middlewares
+      * filtre request & response
+* Taner - implementare aproape completa a Business Logic-ului in Python
+   * descarcare aplicatie din Google Drive
+   * masurarea marime aplicatie
+   * preparare simulatoare - factory reset pentru un clean run
+   * instalare aplicatie pe simulator
+   * rulare launch-uri consecutive
+   * masurare memory usage pentru fiecare launch
+   * WIP - extragere loguri si masurare launch duration
+   * WIP - agregare rezultate, scrierea rezultatelor sub forma de tabel in loguri
+   * WIP - postare comment pe PR cu rezultatele
+   * testele implementate pentru a putea rula pe:
+      * iPhone 8 sau iPhone 11
+      * WARM launch sau COLD launch
+      * numar de launch-uri parametrizat - dupa care se calculeaza media
+### Not commited on Github
+* Google Drive API JSON credentials - confidential, se afla doar pe local
+
+
+
+
+## [Not recorded/recordable in Github, but very significant efforts and time spent]
+## [0.0.0] - 2021-04-01
+### Research
+        Efort si timp semnificative au fost depuse in discutii, dezbateri, research-uri individuale si in echipa si planificari despre cum se va implementa proiectul si care sunt cele mai bune solutii pentru aceste.
+* Toti 3, in echipe - brainstorming despre urmatoarele subiecte:
+   * rulare aplicatie pe simulator vs device real:
+      * am decis simulator pentru ca avem o gama mai larga de device-uri, iar rularea pe simulator este mai controlata (resurse constante, mai stabile in simulator decat pe device real, unde acestea pot fluctua din cauza kernel-ului, care controleaza temperatura, bateria utilizata etc)
+   * calculare timpi de launch si memory usage:
+In ambele cazuri, logurile sunt extrase din simulator cu tool-ul `xcrun`.
+      * prima varianta incercata de Taner:
+         * implementare aplicatie demo iOS (vezi sectiunea ADDED)
+         * extragere timestamp din logul de exit si valoarea de memorie utilizata din logul de memorie scris de aplicatie, dupa rularea pe simulator cu tool-ul `xcrun`
+         * extragere timestamp in script de python in momentul in care se da comanda de launch a aplicatiei
+         * calculare launch duration dupa cele 2 timestampuri extrase
+      * a 2a varianta, gandita pentru a functiona pe orice aplicatie, inclusiv aplicatii la care nu avem acces la codul sursa, incercata de Teodor:
+         * extragere timestamp din loguri de start si fully loaded emise de sistemul de operare iOS
+         * calculare timp de pornire pe baza celor 2 timestampuri
+         * calculare memorie RAM folosita cu utilitarul `top`, caruia i se paseaza PID-ul aplicatiei pornite pe simulator, emis de `xcrun`
+A fost aleasa varianta a 2a pentru aplicabilitate pe orice aplicatie.
+   * parsare loguri:
+      * deoarece timestamp-urile pentru evenimentele de start si fully loaded ale aplicatiei sunt extrase din loguri, a trebuit gandita o metoda de a extrage logurile si a valida ca:
+         * sunt in ordinea corecta
+         * nu apartin unor rulari anterioare
+         * nu lipsesc loguri
+         * nu a crash-uit aplicatia fara sa fie detectata
+      * varianta aleasa, in urma discutiei intre toti 3:
+         * extragere loguri si parsare de la sfarsit la inceput - daca un log lipseste, sau se ajunge la a citi loguri din rulari anterioare - testul este invalidat
+* Teodor - a facut research pentru a implementa Business Logic, despre:
+   * Google Drive API
+      * Cum sa descarci intr-un Python script un fisier stocat in Google Drive
+      * Util pentru a descarca o aplicatie iOS din Google Drive, pentru a o testa
+   * GithubAPI
+      * Cum sa postezi un comment pe un PR din Github, dintr-un Python script
+      * Util pentru a posta rezultatele testelor de performanta pe PR-ul cu modificarile testate ale aplicatiei iOS
+* Corina - a facut research si a rezolvat laboratoarele de PWEB, utile pentru:
+   * autentificare cu token JWT in aplicatia web
+   * conectare aplicatie NodeJS la baza de date PostgreSQL
+   * Cunostinte de Javascript si Web Development pentru a implementa aplicatia
+   * research despre cum sa calculam memory usage-ul. Cele 2 variante incercate de Corina:
+      * prima varianta: pe durata launch-ului, extragere de valori la intervale scurte de timp si calculat maximul
+      * a 2a varianta: extragerea valorii in momentul in care aplicatia este incarcata complet (dupa ce se emite logul de fully loaded de catre OS)
+A fost aleasa a 2a varianta, pentru ca se considera suficient un singur sample.
+* Taner - research pentru Business Logic, despre:
+   * tool-ul XCode `xcrun`, util pentru manipulare simulatoare iOS:
+      * boot, shutdown, reboot, clean, launch app on simulator, terminate  app on simulator, extract logs from simulator
+   * tool-ul `top` pentru a calcula memoria utilizata de un proces
+### Added
+* Taner: aplicatie iOS demo (un joc simplu), in care a implementat:
+   * scrierea unui log de exit in momentul in care aplicatia este incarcata complet
+   * calcularea in Swift, in interiorul aplicatiei, a memoriei heap folosite si scrierea valorii intr-un log 
+
+
+
+
+[Unreleased]: https://github.com/tanerm98/ProiectIDP/commit/b3857e1dfa94972112aa13f428a4ff4c05b9b0dd
+[0.0.1]: https://github.com/tanerm98/ProiectIDP/commit/b3857e1dfa94972112aa13f428a4ff4c05b9b0dd

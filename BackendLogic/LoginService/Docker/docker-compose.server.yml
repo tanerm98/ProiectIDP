@@ -1,0 +1,26 @@
+services:
+  api:
+    build: .
+    environment:
+      NODE_ENV: development
+      PORT: 3001
+      PGHOST: db
+      PGUSER: dbuser
+      PGDATABASE: bookstore
+      PGPASSWORD: dbpass
+      PGPORT: 54321
+    ports:
+      - 3001:3001
+    networks:
+      - lab5network
+  
+  db:
+    networks:
+      - lab5network
+
+  pgadmin:
+    networks:
+      - lab5network
+
+networks:
+  lab5network:
