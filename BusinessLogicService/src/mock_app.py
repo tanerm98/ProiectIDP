@@ -11,7 +11,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 GET = "GET"
 POST = "POST"
-RESULTS_FILE = "results.json"
+MOCK_RESPONSE_DATA = "mock_reponse.json"
 
 app = Flask(__name__)
 
@@ -103,31 +103,23 @@ def run_tests(bundle_id):
         logging.error("Will use default values for parameters...")
 
     logging.info("Command for running the tests: '{COMMAND}'".format(COMMAND=command))
-    p = subprocess.Popen(command, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     logging.info("Test is running...")
-    output, error = p.communicate()
-    logging.info("Job output: '{OUTPUT}'".format(OUTPUT=output))
-    logging.info("Job error: '{ERROR}'".format(ERROR=error))
 
-    test_results_data = None
-    if os.path.exists(RESULTS_FILE):
-        with open(RESULTS_FILE) as results_file:
-            test_results_data = json.load(results_file)
-        logging.info("Job results: '{RESULTS}'".format(RESULTS=test_results_data))
+    if os.path.exists(MOCK_RESPONSE_DATA):
+        with open(MOCK_RESPONSE_DATA) as mock_reponse_file:
+            mock_response = json.load(mock_reponse_file)
+
+        response = app.response_class(
+            response=json.dumps(mock_response),
+            status=200,
+            mimetype='application/json'
+        )
     else:
-        logging.error("No test results found!")
+        response = app.response_class(
+            status=500,
+            mimetype='application/json'
+        )
 
-    response = app.response_class(
-        response=json.dumps(
-            {
-                "message": "Test ran successfuly!",
-                "output": error.strip() + "\n" + output.strip(),
-                "results": test_results_data
-            }
-        ),
-        status=200,
-        mimetype='application/json'
-    )
     BUSY = False
     return response
 

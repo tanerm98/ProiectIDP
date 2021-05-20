@@ -3,6 +3,9 @@ IDP - Proiect in echipa. Descriere: https://docs.google.com/document/d/1H_Lb1h6s
 
 Pasi initializare servicii:
 - database: in Database
+    - docker-compose up
 - Performance Measuring App: in BusinessLogicService
 - Login Service: in BackendLogicServices/LoginService
+    - docker-compose up
 - Webb App: in BackendLogicServices/AppService
+    - docker-compose up

@@ -6,5 +6,5 @@ RUN pip3 install -U pip google-api-python-client
 COPY /src /app
 WORKDIR /app
 
-EXPOSE 5001
+EXPOSE 3004
 CMD ["python3", "app.py"]

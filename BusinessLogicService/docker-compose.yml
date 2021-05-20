@@ -4,4 +4,4 @@ services:
   measure_performance_py:
     build: .
     ports:
-      - "5001:5001"
+      - "3004:3004"
