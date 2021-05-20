@@ -7,6 +7,4 @@ services:
       - "3004:3004"
 
 networks:
-  default:
-    external: true
-    name: database_lab5network
+  database_lab5network:
