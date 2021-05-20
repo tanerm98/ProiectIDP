@@ -5,6 +5,7 @@ Pasi initializare servicii:
 - database: in Database
     - docker-compose up
 - Performance Measuring App: in BusinessLogicService
+    - docker-compose up
 - Login Service: in BackendLogicServices/LoginService
     - docker-compose up
 - Webb App: in BackendLogicServices/AppService
