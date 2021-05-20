@@ -7,19 +7,19 @@ services:
     environment:
       NODE_ENV: development
       PORT: 3002
-      PGHOST: db
+      PGHOST: database_db_1
       PGUSER: dbuser
       PGDATABASE: bookstore
       PGPASSWORD: dbpass
-      PGPORT: 54321
+      PGPORT: 5432
       JWT_SECRET_KEY: myawesomeultrasecretkey
       JWT_ISSUER: 'pw backend'
       JWT_SUBJECT: 'pw'
       JWT_AUDIENCE: 'pw client'
     ports:
       - "3002:3002"
-    networks:
-      - lab5network
 
 networks:
-  lab5network:
+  default:
+    external: true
+    name: database_lab5network
