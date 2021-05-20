@@ -1,4 +1,5 @@
 const express = require('express');
+const http = require('http');
 
 const AuthorsRepository = require('../../Infrastructure/PostgreSQL/Repository/AuthorsRepository.js');
 const ServerError = require('../Models/ServerError.js');
@@ -10,14 +11,6 @@ const ResponseFilter = require('../Filters/ResponseFilter.js');
 
 const Router = express.Router();
 
-Router.post('/', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleConstants.MANAGER), async (req, res) => {
-    
-    const authorBody = new AuthorPostBody(req.body);
-
-    const author = await AuthorsRepository.addAsync(authorBody.FirstName, authorBody.LastName);
-
-    ResponseFilter.setResponseDetails(res, 201, new AuthorResponse(author), req.originalUrl);
-});
 
 Router.get('/', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleConstants.MANAGER), async (req, res) => {
 
@@ -26,55 +19,53 @@ Router.get('/', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleCons
     ResponseFilter.setResponseDetails(res, 200, authors.map(author => new AuthorResponse(author)));
 });
 
-Router.get('/:id', async (req, res) => {
-    let {
-        id
-    } = req.params;
+Router.post('/', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleConstants.MANAGER), async (req, res) => {
 
-    id = parseInt(id);
+    var test_data
 
-    if (!id || id < 1) {
-        throw new ServerError("Id should be a positive integer", 400);
-    }
-       
-    const author = await AuthorsRepository.getByIdAsync(id);
-    
-    if (!author) {
-        throw new ServerError(`Author with id ${id} does not exist!`, 404);
-    }
+    var myPayload = {
+        file_id: "fdsfdsfds54543"
+    };
+    var myPayloadJson = JSON.stringify(myPayload);
 
-    ResponseFilter.setResponseDetails(res, 200, new AuthorResponse(author));
-});
+    var options = {
+        host: "192.168.0.108",
+        port: 3004,
+        path: '/api/run/Fitbit.Concentration',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length' : Buffer.byteLength(myPayloadJson, 'utf8')
+        }
+    };
 
-Router.put('/:id', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleConstants.MANAGER), async (req, res) => {
+    var reqPost = http.request(options, function(response) {
+        console.log('STATUS: ' + response.statusCode);
+        console.log('HEADERS: ' + JSON.stringify(response.headers));
+        response.setEncoding('utf8');
+        response.on('data', function (chunk) {
+            console.log('BODY: ' + chunk);
+            test_data = chunk;
+        });
+    })
+    reqPost.write(myPayloadJson);
+    reqPost.end();
+    reqPost.on('error', function(e) {
+        console.error(e);
+    });
 
-    const authorBody = new AuthorPutBody(req.body, req.params.id);
-
-    const author = await AuthorsRepository.updateByIdAsync(authorBody.Id, authorBody.FirstName, authorBody.LastName);
-        
-    if (!author) {
-        throw new ServerError(`Author with id ${id} does not exist!`, 404);
-    }
-
-    ResponseFilter.setResponseDetails(res, 200, new AuthorResponse(author));
-});
-
-Router.delete('/:id', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleConstants.MANAGER), async (req, res) => {
-    const {
-        id
-    } = req.params;
-
-    if (!id || id < 1) {
-        throw new ServerError("Id should be a positive integer", 400);
-    }
-    
-    const author = await AuthorsRepository.deleteByIdAsync(parseInt(id));
-    
-    if (!author) {
-        throw new ServerError(`Author with id ${id} does not exist!`, 404);
+    var timeout = 10000;
+    while (test_data == undefined) {
+        timeout -= 500;
+        await new Promise(r => setTimeout(r, 500));
+        if (timeout <= 0) {
+            break;
+        }
     }
 
-    ResponseFilter.setResponseDetails(res, 204, "Entity deleted succesfully");
+    console.log('TEST RESULTS: ' + test_data)
+    ResponseFilter.setResponseDetails(res, 201, test_data);
+
 });
 
 module.exports = Router;

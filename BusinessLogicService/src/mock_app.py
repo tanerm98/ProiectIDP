@@ -54,6 +54,7 @@ def run_tests(bundle_id):
 
     try:
         payload = request.get_json()
+        logging.info("Payload: '{PAYLOAD}'".format(PAYLOAD=payload))
         if payload:
             if "file_id" in payload:
                 command += ["--file_id", str(payload["file_id"])]
@@ -108,9 +109,12 @@ def run_tests(bundle_id):
     if os.path.exists(MOCK_RESPONSE_DATA):
         with open(MOCK_RESPONSE_DATA) as mock_reponse_file:
             mock_response = json.load(mock_reponse_file)
+            logging.info(mock_response["output"])
+            logging.info(mock_response["results"])
+            logging.info(mock_response["message"])
 
         response = app.response_class(
-            response=json.dumps(mock_response),
+            response=json.dumps(mock_response["results"]),
             status=200,
             mimetype='application/json'
         )

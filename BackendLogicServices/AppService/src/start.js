@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const createError = require('http-errors');
+const cors = require('cors')
 
 require('express-async-errors');
 require('log-timestamp');
@@ -12,6 +13,7 @@ const ServerError = require('./WebApp/Models/ServerError.js');
 
 const app = express();
 
+app.use(cors());
 app.use(helmet());
 app.use(morgan(':remote-addr - :remote-user [:date[web]] ":method :url HTTP/:http-version" :status :res[content-length]'));
 app.use(express.json());
