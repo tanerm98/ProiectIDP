@@ -54,6 +54,7 @@ def run_tests(bundle_id):
 
     try:
         payload = request.get_json()
+        logging.info("Payload: '{PAYLOAD}'".format(PAYLOAD=payload))
         if payload:
             if "file_id" in payload:
                 command += ["--file_id", str(payload["file_id"])]
@@ -106,8 +107,7 @@ def run_tests(bundle_id):
     p = subprocess.Popen(command, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     logging.info("Test is running...")
     output, error = p.communicate()
-    logging.info("Job output: '{OUTPUT}'".format(OUTPUT=output))
-    logging.info("Job error: '{ERROR}'".format(ERROR=error))
+    logging.info("Job output: '{OUTPUT}'".format(OUTPUT=error.strip() + "\n" + output.strip()))
 
     test_results_data = None
     if os.path.exists(RESULTS_FILE):
@@ -120,8 +120,6 @@ def run_tests(bundle_id):
     response = app.response_class(
         response=json.dumps(
             {
-                "message": "Test ran successfuly!",
-                "output": error.strip() + "\n" + output.strip(),
                 "results": test_results_data
             }
         ),
