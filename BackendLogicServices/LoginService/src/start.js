@@ -1,3 +1,8 @@
+'use strict';
+const { networkInterfaces } = require('os');
+const nets = networkInterfaces();
+const results = Object.create(null); // Or just '{}', an empty object
+
 const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -31,8 +36,16 @@ app.use((err, req, res, next) => {
     }
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3003;
 
 app.listen(port, () => {
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+            if (net.family === 'IPv4' && !net.internal) {
+                console.log(net.address);
+            }
+        }
+    }
     console.log(`App is listening on ${port}`);
 });

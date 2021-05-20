@@ -9,6 +9,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: test@test.com
       PGADMIN_DEFAULT_PASSWORD: test
+    networks:
+      - lab5network
 
   db:
     image: postgres
@@ -23,6 +25,11 @@ services:
     volumes:
       - lab6_pgdb:/var/lib/postgresql/data
       - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - lab5network
 
 volumes:
   lab6_pgdb:
+
+networks:
+  lab5network:

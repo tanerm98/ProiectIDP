@@ -1,24 +1,19 @@
+version: "3.7"
+
 services:
-  api:
+
+  loginservice_api:
     build: .
     environment:
       NODE_ENV: development
-      PORT: 3000
+      PORT: 3003
       PGHOST: db
       PGUSER: dbuser
       PGDATABASE: bookstore
       PGPASSWORD: dbpass
       PGPORT: 54321
     ports:
-      - 3000:3000
-    networks:
-      - lab5network
-  
-  db:
-    networks:
-      - lab5network
-
-  pgadmin:
+      - "3003:3003"
     networks:
       - lab5network
 
