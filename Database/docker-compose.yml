@@ -77,6 +77,30 @@ services:
       JWT_ISSUER: 'pw backend'
       JWT_SUBJECT: 'pw'
       JWT_AUDIENCE: 'pw client'
+      
+  kong:
+    image: kong:latest
+    volumes:
+      - ./kong:/usr/local/kong/declarative #injectarea fisierului de configurare la calea specificata
+    environment:
+      KONG_DATABASE: 'off' #obligatoriu, daca se vrea modul DB-less
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml #trebuie specificat unde anume se va gasi fisierul de configurare
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+    ports:
+      - 8000:8000 #expunerea porturilor
+      - 8443:8443
+    deploy:
+      placement:
+        constraints: [node.role == manager] #constrangerea de rulare doar pe master, pentru a nu exista conflict la nivel de volume
+      restart_policy:
+        condition: on-failure
+    networks:
+      - lab5network
+
 
 volumes:
   lab6_pgdb:
@@ -85,4 +109,3 @@ volumes:
 networks:
   lab5network:
 #    driver: overlay
-
