@@ -111,3 +111,8 @@ venv
 .idea
 BusinessLogic/.DS_Store
 .DS_Store
+
+BusinessLogicService/gdrive_api_service_credentials.json
+BusinessLogicService/src/__pycache__/
+BusinessLogicService/src/gdrive_api_service_credentials.json
+MEMO

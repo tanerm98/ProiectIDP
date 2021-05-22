@@ -1,0 +1,95 @@
+
+DONE ### DATABASE
+DONE - roles
+DONE    id  value
+DONE - users
+DONE    id  username    password    role_id register_date
+DONE - user_metrics
+DONE    date    increment_logins    increment_jobs
+DONE    $ update user_metrics set registers=1, logins=1 where today_date='2021-05-22';
+DONE - workspace
+DONE    app_bundle_id   app_description repository_link
+DONE    $ insert into workspaces (app_bundle_id, description, repository_link) values ('app.bundle', 'an app', 'www.site.com');
+DONE - jobs
+DONE    app_bundle_id    job_id  pr_id   results summary
+DONE    $ insert into jobs (app_bundle_id, results, summary) values ('app.bundle', 'an app', 'www.site.com');
+DONE- launch_data
+DONE    id  app_bundle_id   device  launch_type launch_duration memory_usage
+DONE    $ insert into launch_data (app_bundle_id, device, launch_type, launch_duration, memory_usage) values ('app.bundle', 'iPhone 11', 'COLD', 5.34, 10.12);
+DONE - install_data
+DONE    id  app_bundle_id app_size  install_launch  install_memory
+
+
+
+### ENDPOINTS
+DONE - register
+DONE    add register date
+DONE - login
+DONE    increment in database
+- create_workspace
+    parameters:
+        app_bundle_id
+    body:
+        app_description
+        repository_link
+- view all workspaces
+    returns list of:
+        app_bundle_id
+- view a workspace
+    parameters:
+        app_bundle_id
+    returns:
+        app_description
+        repository_link
+        list_of_job_ids
+- create_job
+    parameters:
+        app_bundle_id
+    body:
+        parameters for business logic job
+    returns:
+        test_results
+        summary
+- view all jobs
+    parameters:
+        app_bundle_id
+    return:
+        job_id
+- view a job:
+    parameters:
+        job_id
+    return:
+        test_results
+        summary
+- remove job
+    paramater:
+        job_id
+- remove workspace
+    parameter:
+        app_bundle_id
+
+- view performance graphs:
+    parameter:
+        app_bundle_id
+    body:
+        number of days - default = 7
+        device
+        launch_type
+    return jsons for each case:
+        date - launch_time
+        date - memory_usage
+        date - app_size
+        date - install_launch
+        date - install_memory
+
+
+
+
+
+
+
+
+
+
+
+
