@@ -44,28 +44,28 @@ DONE         repository_link
 DONE - remove workspace
 DONE     parameter:
 DONE         app_bundle_id
-- create_job
-    parameters:
-        app_bundle_id
-    body:
-        parameters for business logic job
-    returns:
-        test_results
-        summary
-- view all jobs
-    parameters:
-        app_bundle_id
-    return:
-        job_id
-- view a job:
-    parameters:
-        job_id
-    return:
-        test_results
-        summary
-- remove job
-    paramater:
-        job_id
+DONE - create_job
+DONE     parameters:
+DONE         app_bundle_id
+DONE     body:
+DONE         parameters for business logic job
+DONE     returns:
+DONE         test_results
+DONE         summary
+DONE - view all jobs
+DONE     parameters:
+DONE         app_bundle_id
+DONE     return:
+DONE         job_id
+DONE - view a job:
+DONE     parameters:
+DONE         job_id
+DONE     return:
+DONE         test_results
+DONE         summary
+DONE - remove job
+DONE     paramater:
+DONE         job_id
 
 
 - view performance graphs:

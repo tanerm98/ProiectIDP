@@ -16,6 +16,7 @@ services:
       JWT_ISSUER: 'pw backend'
       JWT_SUBJECT: 'pw'
       JWT_AUDIENCE: 'pw client'
+      BUSINESSHOST: businesslogicservice_measure_performance_py_1
     ports:
       - "3002:3002"
 

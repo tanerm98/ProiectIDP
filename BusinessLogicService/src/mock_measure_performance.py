@@ -543,55 +543,41 @@ def run_tests(args):
     :param args: script argument
     :return: dictionary with test results
     """
-    TEST_RESULTS = {
-        LAUNCHES: [],
-        APP_SIZE: None,
-        INSTALL_LAUNCH_DURATION: None,
-        INSTALL_MEMORY_USAGE: None
-    }
-
     logging.info("----------------------------------------------------------------------------------------------------")
-    app_path = None
     if args.app_path is not None or args.file_id is not None:
-        app_path = get_app(args)
-        if app_path is None:
-            return None
-        app_size = compute_app_size(app_path)
-        TEST_RESULTS[APP_SIZE] = app_size
+        get_app(args)
 
-    shutdown_simulators()
-
-    logging.info("----------------------------------------------------------------------------------------------------")
-    logging.info("Beginning test sequence...")
-    for simulator_name in args.device:
-        try:
-            logging.info("----------------------------------------------------------------------------------------------------")
-            logging.info("Running tests on simulator '{DEVICE}':".format(DEVICE=simulator_name))
-
-            prepare_simulator(simulator_name)
-            boot_simulator(simulator_name)
-            if app_path is not None:
-                install_app(simulator_name, app_path)
-
-            if TEST_RESULTS[INSTALL_LAUNCH_DURATION] is None or TEST_RESULTS[INSTALL_MEMORY_USAGE] is None:
-                logging.info("---------------------------------------------")
-                launch_duration, memory_usage = measure_performance_at_first_launch(simulator_name, args.bundle_id)
-                TEST_RESULTS[INSTALL_LAUNCH_DURATION] = launch_duration
-                TEST_RESULTS[INSTALL_MEMORY_USAGE] = memory_usage
-
-            for launch_type in args.launch_type:
-                try:
-                    logging.info("---------------------------------------------")
-                    launch_data = measure_average_performance_of_launches(simulator_name, launch_type, args.launch_nr, args.bundle_id)
-                    TEST_RESULTS[LAUNCHES].append(launch_data)
-                except Exception as e:
-                    logging.error("Testing failed for '{LAUNCH_TYPE}' launch type with error '{ERROR}'. Skipping...".format(ERROR=e, LAUNCH_TYPE=launch_type))
-
-            shutdown_simulators()
-            logging.info("Finished running tests on device '{DEVICE}'".format(DEVICE=simulator_name))
-
-        except Exception as e:
-            logging.error("Testing failed for '{SIMULATOR}' device with error '{ERROR}'. Skipping...".format(ERROR=e, SIMULATOR=simulator_name))
+    TEST_RESULTS = {
+        "LAUNCHES": [
+            {
+                "DEVICE": "iPhone 8",
+                "LAUNCH TYPE": "WARM",
+                "MEMORY USAGE": 5.35,
+                "LAUNCH DURATION": 2188
+            },
+            {
+                "DEVICE": "iPhone 8",
+                "LAUNCH TYPE": "COLD",
+                "MEMORY USAGE": 5.37,
+                "LAUNCH DURATION": 2623
+            },
+            {
+                "DEVICE": "iPhone 11",
+                "LAUNCH TYPE": "WARM",
+                "MEMORY USAGE": 5.33,
+                "LAUNCH DURATION": 2304
+            },
+            {
+                "DEVICE": "iPhone 11",
+                "LAUNCH TYPE": "COLD",
+                "MEMORY USAGE": 5.38,
+                "LAUNCH DURATION": 3252
+            }
+        ],
+        "APP SIZE": 1,
+        "FIRST LAUNCH AFTER INSTALL - DURATION": 2914,
+        "FIRST LAUNCH AFTER INSTALL - MEMORY USAGE": 5.36
+    }
 
     return TEST_RESULTS
 

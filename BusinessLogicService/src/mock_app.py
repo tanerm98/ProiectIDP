@@ -11,7 +11,9 @@ logging.getLogger().setLevel(logging.INFO)
 
 GET = "GET"
 POST = "POST"
-MOCK_RESPONSE_DATA = "mock_reponse.json"
+
+RESULTS_FILE = "results.json"
+SUMMARY_FILE = "summary"
 
 app = Flask(__name__)
 
@@ -40,7 +42,7 @@ def run_tests(bundle_id):
         BUSY = True
 
     try:
-        command = ["python3", "src/measure_performance.py"]
+        command = ["python3", "src/mock_measure_performance.py"]
         command += ["--bundle_id", str(bundle_id)]
     except:
         logging.error("Mandatory argument `bundle_id` invalid.")
@@ -104,26 +106,36 @@ def run_tests(bundle_id):
         logging.error("Will use default values for parameters...")
 
     logging.info("Command for running the tests: '{COMMAND}'".format(COMMAND=command))
+    p = subprocess.Popen(command, universal_newlines=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     logging.info("Test is running...")
+    output, error = p.communicate()
+    logging.info("Job output: '{OUTPUT}'".format(OUTPUT=error.strip() + "\n" + output.strip()))
 
-    if os.path.exists(MOCK_RESPONSE_DATA):
-        with open(MOCK_RESPONSE_DATA) as mock_reponse_file:
-            mock_response = json.load(mock_reponse_file)
-            logging.info(mock_response["output"])
-            logging.info(mock_response["results"])
-            logging.info(mock_response["message"])
-
-        response = app.response_class(
-            response=json.dumps(mock_response["results"]),
-            status=200,
-            mimetype='application/json'
-        )
+    test_results_data = None
+    if os.path.exists(RESULTS_FILE):
+        with open(RESULTS_FILE) as results_file:
+            test_results_data = json.load(results_file)
+        logging.info("Job results: '{RESULTS}'".format(RESULTS=test_results_data))
     else:
-        response = app.response_class(
-            status=500,
-            mimetype='application/json'
-        )
+        logging.error("No test results found!")
 
+    test_results_summary = None
+    if os.path.exists(SUMMARY_FILE):
+        f = open(SUMMARY_FILE, "r")
+        test_results_summary = f.read()
+    else:
+        logging.error("No test summary found!")
+
+    response = app.response_class(
+        response=json.dumps(
+            {
+                "results": test_results_data,
+                "summary": test_results_summary
+            }
+        ),
+        status=200,
+        mimetype='application/json'
+    )
     BUSY = False
     return response
 
