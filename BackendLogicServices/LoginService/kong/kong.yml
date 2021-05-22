@@ -1,0 +1,13 @@
+_format_version: "2.1"
+
+services:
+  - name: nume1
+    url: http://loginservice_api:3003/
+    routes:
+      - name: loginservice_api
+        paths: 
+          - /log/
+
+# htttp://localhost:3003/api/v1/register
+# htttp://localhost:8000/log/api/v1/register
+

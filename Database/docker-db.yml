@@ -1,0 +1,85 @@
+version: "3.7"
+
+services:
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 30001:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: test
+    networks:
+      - lab5network
+    hostname: pgadmin
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+
+  #db:
+  #  image: postgres
+  #  environment:
+  #    POSTGRES_USER: dbuser
+  #    POSTGRES_PASSWORD: dbpass
+  #    POSTGRES_DB: bookstore
+  #    TZ: Europe/Bucharest
+  #    PGTZ: Europe/Bucharest
+  #  ports:
+  #    - 5432:5432
+  #  volumes:
+  #    - lab6_pgdb:/var/lib/postgresql/data
+  #    - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+  #  networks:
+  #    - lab5network
+  #  hostname: db
+  #  deploy:
+  #    mode: replicated
+  #    replicas: 1
+  #    placement:
+  #      constraints: [node.role == manager]
+  #    restart_policy:
+  #      condition: on-failure
+      
+  loginservice_api:
+    image: myimg_1:latest
+    environment:
+      NODE_ENV: development
+      PORT: 3003
+      PGHOST: database_db_1
+      PGUSER: dbuser
+      PGDATABASE: bookstore
+      PGPASSWORD: dbpass
+      PGPORT: 5432
+      JWT_SECRET_KEY: myawesomeultrasecretkey
+      JWT_ISSUER: 'pw backend'
+      JWT_SUBJECT: 'pw'
+      JWT_AUDIENCE: 'pw client'
+    ports:
+      - 3003:3003
+    networks:
+      - lab5network
+    #depends_on:
+    #  - 'db'
+    #env_file: ./.env
+    hostname: loginservice_api
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  lab6_pgdb:
+
+networks:
+  lab5network:
+#    driver: overlay
+
+
+

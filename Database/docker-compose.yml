@@ -11,6 +11,82 @@ services:
       PGADMIN_DEFAULT_PASSWORD: test
     networks:
       - lab5network
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    hostname: pgadmin
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_DB: bookstore
+      TZ: Europe/Bucharest
+      PGTZ: Europe/Bucharest
+    ports:
+      - "5432:5432"
+    volumes:
+      - lab6_pgdb:/var/lib/postgresql/data
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+    networks:
+      - lab5network
+    hostname: db
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+     
+      
+  loginservice-api:
+    image: myimg_3:latest
+    ports:
+      - "3004:3004"
+    networks:
+      - lab5network
+    #depends_on:
+    #  - 'db'
+    #env_file: ./.env
+    hostname: loginservice-api
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  lab6_pgdb:
+  pgadmin-data:
+  
+networks:
+  lab5network:
+#    driver: overlay
+
+
+version: "3.7"
+
+services:
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "30001:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: test
+    networks:
+      - lab5network
 
   db:
     image: postgres
