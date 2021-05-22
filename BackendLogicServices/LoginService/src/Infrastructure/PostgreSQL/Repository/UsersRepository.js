@@ -37,7 +37,7 @@ const updateRegisteredUsersMetric = async () => {
     const metrics = await queryAsync('SELECT * FROM user_metrics WHERE today_date=CURRENT_DATE');
 
     if (metrics.length == 0) {
-        await queryAsync('INSERT INTO user_metrics (registers, logins) VALUES (1, 0)');
+        await queryAsync('INSERT INTO user_metrics (registers) VALUES (1)');
     } else {
         const registers = metrics[0].registers;
         await queryAsync('UPDATE user_metrics SET registers=$1 WHERE today_date=CURRENT_DATE', [registers+1]);
@@ -50,7 +50,7 @@ const updateLoggedInUsersMetric = async () => {
     const metrics = await queryAsync('SELECT * FROM user_metrics WHERE today_date=CURRENT_DATE');
 
     if (metrics.length == 0) {
-        await queryAsync('INSERT INTO user_metrics (registers, logins) VALUES (0, 1)');
+        await queryAsync('INSERT INTO user_metrics (logins) VALUES (1)');
     } else {
         const logins = metrics[0].logins;
         await queryAsync('UPDATE user_metrics SET logins=$1 WHERE today_date=CURRENT_DATE', [logins+1]);

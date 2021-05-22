@@ -5,7 +5,7 @@ DONE    id  value
 DONE - users
 DONE    id  username    password    role_id register_date
 DONE - user_metrics
-DONE    date    increment_logins    increment_jobs
+DONE    date    increment_logins    increment_registers increment_jobs_run
 DONE    $ update user_metrics set registers=1, logins=1 where today_date='2021-05-22';
 DONE - workspace
 DONE    app_bundle_id   app_description repository_link
@@ -26,15 +26,15 @@ DONE - register
 DONE    add register date
 DONE - login
 DONE    increment in database
-- create_workspace
-    parameters:
-        app_bundle_id
-    body:
-        app_description
-        repository_link
-- view all workspaces
-    returns list of:
-        app_bundle_id
+DONE - create_workspace
+DONE     parameters:
+DONE         app_bundle_id
+DONE     body:
+DONE         app_description
+DONE         repository_link
+DONE - view all workspaces
+DONE     returns list of:
+DONE         app_bundle_id
 - view a workspace
     parameters:
         app_bundle_id

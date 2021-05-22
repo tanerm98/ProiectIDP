@@ -7,14 +7,14 @@ CREATE TABLE IF NOT EXISTS users (
     id serial PRIMARY KEY,
     username varchar NOT NULL UNIQUE,
     password varchar NOT NULL,
-    role_id integer REFERENCES roles(id),
-    today_date date DEFAULT CURRENT_DATE
+    role_id integer REFERENCES roles(id)
 );
 
 CREATE TABLE IF NOT EXISTS user_metrics (
     today_date date DEFAULT CURRENT_DATE PRIMARY KEY,
     registers integer DEFAULT 0,
-    logins integer DEFAULT 0
+    logins integer DEFAULT 0,
+    jobs integer DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS workspaces (

@@ -1,7 +1,7 @@
 const express = require('express');
 const http = require('http');
 
-const AuthorsRepository = require('../../Infrastructure/PostgreSQL/Repository/AuthorsRepository.js');
+const AuthorsRepository = require('../../Infrastructure/PostgreSQL/Repository/WorkspacesRepository.js');
 const ServerError = require('../Models/ServerError.js');
 const { AuthorPostBody, AuthorPutBody, AuthorResponse } = require('../Models/Author.js');
 const AuthorizationFilter = require('../Filters/AuthorizationFilter.js');
