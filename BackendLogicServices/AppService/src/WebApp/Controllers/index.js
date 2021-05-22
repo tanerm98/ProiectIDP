@@ -4,8 +4,8 @@ const {
     authorizeAndExtractTokenAsync
 } = require('../Filters/JWTFilter.js');
 
-const AuthorsController = require('./AuthorsController.js');
+const AuthorsController = require('./WorkspacesController.js');
 
-Router.use('/v1/authors', authorizeAndExtractTokenAsync, AuthorsController);
+Router.use('/v1/workspaces', authorizeAndExtractTokenAsync, AuthorsController);
 
 module.exports = Router;

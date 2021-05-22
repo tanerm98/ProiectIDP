@@ -35,13 +35,15 @@ DONE         repository_link
 DONE - view all workspaces
 DONE     returns list of:
 DONE         app_bundle_id
-- view a workspace
-    parameters:
-        app_bundle_id
-    returns:
-        app_description
-        repository_link
-        list_of_job_ids
+DONE - view a workspace
+DONE     parameters:
+DONE         app_bundle_id
+DONE     returns:
+DONE         app_description
+DONE         repository_link
+DONE - remove workspace
+DONE     parameter:
+DONE         app_bundle_id
 - create_job
     parameters:
         app_bundle_id
@@ -64,9 +66,7 @@ DONE         app_bundle_id
 - remove job
     paramater:
         job_id
-- remove workspace
-    parameter:
-        app_bundle_id
+
 
 - view performance graphs:
     parameter:
