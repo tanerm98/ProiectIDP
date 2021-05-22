@@ -20,6 +20,8 @@ Router.post('/register', async (req, res) => {
     const userBody = new UserBody(req.body);
     const user = await UsersManager.registerAsync(userBody.Username, userBody.Password);
 
+    await UsersRepository.updateRegisteredUsersMetric();
+
     ResponseFilter.setResponseDetails(res, 201, new UserRegisterResponse(user));
 });
 
@@ -28,6 +30,8 @@ Router.post('/login', async (req, res) => {
     const userBody = new UserBody(req.body);
     const userDto = await UsersManager.authenticateAsync(userBody.Username, userBody.Password);
     const user = new UserLoginResponse(userDto.Token, userDto.Role);
+
+    await UsersRepository.updateLoggedInUsersMetric();
 
     ResponseFilter.setResponseDetails(res, 200, user);
 });

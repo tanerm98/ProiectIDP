@@ -9,7 +9,7 @@ services:
       PORT: 3003
       PGHOST: database_db_1
       PGUSER: dbuser
-      PGDATABASE: bookstore
+      PGDATABASE: performanceapp
       PGPASSWORD: dbpass
       PGPORT: 5432
       JWT_SECRET_KEY: myawesomeultrasecretkey
