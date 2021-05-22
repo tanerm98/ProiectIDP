@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const ServerError = require('../../../WebApp/Models/ServerError.js');
 
 const options = {
-    issuer: 'pw backend',// process.env.JWT_ISSUER,
-    subject: 'pw', //process.env.JWT_SUBJECT,
-    audience: 'pw client'//process.env.JWT_AUDIENCE
+    issuer:  process.env.JWT_ISSUER,
+    subject: process.env.JWT_SUBJECT,
+    audience: process.env.JWT_AUDIENCE
 };
 
 const generateTokenAsync = async (payload) => {
@@ -14,7 +14,7 @@ const generateTokenAsync = async (payload) => {
         const token = jwt.sign({
             userId: payload.UserId,
             userRole: payload.UserRole
-        }, "myawesomeultrasecretkey"/*process.env.JWT_SECRET_KEY*/, options);
+        }, process.env.JWT_SECRET_KEY, options);
         return token;
     } catch (err) {
         console.trace(err);
@@ -24,7 +24,7 @@ const generateTokenAsync = async (payload) => {
 
 const verifyAndDecodeDataAsync = async (token) => {
     try {
-        const decoded = jwt.verify(token, "myawesomeultrasecretkey"/*process.env.JWT_SECRET_KEY*/, options);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY, options);
         return decoded;
     } catch (err) {
         console.trace(err);

@@ -13,7 +13,7 @@ services:
       - lab5network
     volumes:
       - pgadmin-data:/var/lib/pgadmin
-    hostname: pgadmin
+    hostname: database_pgadmin_1
     deploy:
       mode: replicated
       replicas: 1
@@ -27,7 +27,7 @@ services:
     environment:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: dbpass
-      POSTGRES_DB: bookstore
+      POSTGRES_DB: book1
       TZ: Europe/Bucharest
       PGTZ: Europe/Bucharest
     ports:
@@ -35,9 +35,10 @@ services:
     volumes:
       - lab6_pgdb:/var/lib/postgresql/data
       - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - lab5network
-    hostname: db
+    hostname: database_db_1
     deploy:
       mode: replicated
       replicas: 1
@@ -56,7 +57,7 @@ services:
     #depends_on:
     #  - 'db'
     #env_file: ./.env
-    hostname: loginservice-api
+    hostname: database_loginservice-api_1
     deploy:
       mode: replicated
       replicas: 1
@@ -64,6 +65,18 @@ services:
         constraints: [node.role == manager]
       restart_policy:
         condition: on-failure
+    environment:
+      NODE_ENV: development
+      PORT: 3004
+      PGHOST: database_db_1
+      PGUSER: dbuser
+      PGDATABASE: book1
+      PGPASSWORD: dbpass
+      PGPORT: 5432
+      JWT_SECRET_KEY: myawesomeultrasecretkey
+      JWT_ISSUER: 'pw backend'
+      JWT_SUBJECT: 'pw'
+      JWT_AUDIENCE: 'pw client'
 
 volumes:
   lab6_pgdb:
@@ -73,39 +86,3 @@ networks:
   lab5network:
 #    driver: overlay
 
-
-version: "3.7"
-
-services:
-
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-      - "30001:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: test@test.com
-      PGADMIN_DEFAULT_PASSWORD: test
-    networks:
-      - lab5network
-
-  db:
-    image: postgres
-    environment:
-      POSTGRES_USER: dbuser
-      POSTGRES_PASSWORD: dbpass
-      POSTGRES_DB: performanceapp
-      TZ: Europe/Bucharest
-      PGTZ: Europe/Bucharest
-    ports:
-      - "54321:5432"
-    volumes:
-      - lab6_pgdb:/var/lib/postgresql/data
-      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
-    networks:
-      - lab5network
-
-volumes:
-  lab6_pgdb:
-
-networks:
-  lab5network:

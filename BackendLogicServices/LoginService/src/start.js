@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
     }
 });
 
-const port = 3004;//process.env.PORT || 3003;
+const port = process.env.PORT || 3004;
 
 app.listen(port, () => {
     for (const name of Object.keys(nets)) {
