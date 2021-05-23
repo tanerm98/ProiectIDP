@@ -3,6 +3,7 @@ const http = require('http');
 
 const JobsRepository = require('../../Infrastructure/PostgreSQL/Repository/JobsRepository.js');
 const MetricsRepository = require('../../Infrastructure/PostgreSQL/Repository/MetricsRepository.js');
+const UsersRepository = require('../../Infrastructure/PostgreSQL/Repository/UsersRepository.js');
 const ServerError = require('../Models/ServerError.js');
 const { JobDatabaseBody, JobResponse } = require('../Models/Job.js');
 const AuthorizationFilter = require('../Filters/AuthorizationFilter.js');
@@ -77,6 +78,8 @@ Router.post('/run/:app_bundle_id', AuthorizationFilter.authorizeRoles(RoleConsta
         MetricsRepository.addAsyncLaunchData(app_bundle_id_str, metric.DEVICE, metric['LAUNCH TYPE'], metric['LAUNCH DURATION'], metric['MEMORY USAGE']);
     }
     MetricsRepository.addAsyncInstallData(app_bundle_id_str, test_results['APP SIZE'], test_results['FIRST LAUNCH AFTER INSTALL - DURATION'], test_results['FIRST LAUNCH AFTER INSTALL - MEMORY USAGE']);
+
+    await UsersRepository.updateJobsRunUsersMetric();
 
     ResponseFilter.setResponseDetails(res, 201, new JobResponse(job.id, job.summary, job.app_bundle_id, job.pr_id));
 });

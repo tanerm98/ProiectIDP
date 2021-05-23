@@ -44,8 +44,22 @@ const getRunJobs = async (limit) => {
     return await queryAsync(command);
 };
 
+const updateJobsRunUsersMetric = async () => {
+    console.info(`Updating registered users metric`);
+    const metrics = await queryAsync('SELECT * FROM user_metrics WHERE today_date=CURRENT_DATE');
+
+    if (metrics.length == 0) {
+        await queryAsync('INSERT INTO user_metrics (jobs) VALUES (1)');
+    } else {
+        const jobs = metrics[0].jobs;
+        await queryAsync('UPDATE user_metrics SET jobs=$1 WHERE today_date=CURRENT_DATE', [jobs+1]);
+    }
+
+}
+
 module.exports = {
     getUserRegisters,
     getUserLogin,
-    getRunJobs
+    getRunJobs,
+    updateJobsRunUsersMetric
 }
