@@ -11,7 +11,9 @@ logging.getLogger().setLevel(logging.INFO)
 
 GET = "GET"
 POST = "POST"
+
 RESULTS_FILE = "results.json"
+SUMMARY_FILE = "summary"
 
 app = Flask(__name__)
 
@@ -117,10 +119,18 @@ def run_tests(bundle_id):
     else:
         logging.error("No test results found!")
 
+    test_results_summary = None
+    if os.path.exists(SUMMARY_FILE):
+        f = open(SUMMARY_FILE, "r")
+        test_results_summary = f.read()
+    else:
+        logging.error("No test summary found!")
+
     response = app.response_class(
         response=json.dumps(
             {
-                "results": test_results_data
+                "results": test_results_data,
+                "summary": test_results_summary
             }
         ),
         status=200,
