@@ -10,7 +10,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: test@test.com
       PGADMIN_DEFAULT_PASSWORD: test
     networks:
-      - lab5network
+      - pg_network
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     hostname: database_pgadmin_1
@@ -38,6 +38,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - lab5network
+      - pg_network
     hostname: database_db_1
     deploy:
       mode: replicated
@@ -77,6 +78,48 @@ services:
       JWT_ISSUER: 'pw backend'
       JWT_SUBJECT: 'pw'
       JWT_AUDIENCE: 'pw client'
+      
+  appservice-api:
+    image: appsvs:latest
+    networks:
+      - lab5network
+    hostname: database_appservice-api_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      PGHOST: database_db_1
+      PGUSER: dbuser
+      PGDATABASE: book1
+      PGPASSWORD: dbpass
+      PGPORT: 5432
+      JWT_SECRET_KEY: myawesomeultrasecretkey
+      JWT_ISSUER: 'pw backend'
+      JWT_SUBJECT: 'pw'
+      JWT_AUDIENCE: 'pw client'
+    ports:
+      - 3002:3002
+      
+  measure_performance-py:
+    image: myperf:latest
+    ports:
+      - 3005:3005
+    networks:
+      - lab5network
+    hostname: database_measure_performance-py_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
       
   kong:
     image: kong:latest
@@ -143,4 +186,5 @@ volumes:
 networks:
   lab5network:
   portainer_network:
-#    driver: overlay
+  pg_network:
+#    driver: overla
