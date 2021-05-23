@@ -11,7 +11,7 @@ const ResponseFilter = require('../Filters/ResponseFilter.js');
 
 const Router = express.Router();
 
-Router.get('/analytics/', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN, RoleConstants.MANAGER, RoleConstants.USER), async (req, res) => {
+Router.get('/analytics/', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN), async (req, res) => {
 
     console.info('Received request to view analytics graphs for users...');
 
