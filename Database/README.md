@@ -20,4 +20,4 @@ Setup swarm
 3. run chmod 777 on all kong.yml files (now only in Database/kong folder)
 4. docker stack deploy -c docker-compose-all.yml lab5
 5. wait to hava all REPLICAS 1/1
-6. send querie
+6. send queries
