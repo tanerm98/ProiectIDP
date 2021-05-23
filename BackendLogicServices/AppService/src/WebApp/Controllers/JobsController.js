@@ -22,7 +22,7 @@ Router.post('/run/:app_bundle_id', AuthorizationFilter.authorizeRoles(RoleConsta
     var myPayloadJson = JSON.stringify(req.body);
     var test_data;
 
-    console.info("Received request to run performance test job for application " + app_bundle_id);
+    console.info("Received request to run performance test job for application " + app_bundle_id_str);
     console.info("Request body: " + myPayloadJson);
 
     var options = {
@@ -88,12 +88,12 @@ Router.get('/bundle/:app_bundle_id', AuthorizationFilter.authorizeRoles(RoleCons
 
     app_bundle_id_str = String(app_bundle_id);
 
-    console.info('Received request to view job for bundle ID ' + app_bundle_id);
+    console.info('Received request to view job for bundle ID ' + app_bundle_id_str);
 
-    const jobs = await JobsRepository.getAllForWorkspaceAsync(app_bundle_id);
+    const jobs = await JobsRepository.getAllForWorkspaceAsync(app_bundle_id_str);
 
     if (!jobs) {
-        throw new ServerError(`Jobs for bundle ID ${app_bundle_id} do not exist!`, 404);
+        throw new ServerError(`Jobs for bundle ID ${app_bundle_id_str} do not exist!`, 404);
     }
 
     ResponseFilter.setResponseDetails(res, 200, jobs.map(job => new JobDatabaseBody(job)));
