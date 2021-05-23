@@ -106,7 +106,7 @@ Router.get('/id/:job_id', AuthorizationFilter.authorizeRoles(RoleConstants.ADMIN
 
     job_id_str = String(job_id);
 
-    console.info('Received request to view job wirh ID ' + job_id_str);
+    console.info('Received request to view job with ID ' + job_id_str);
 
     const job = await JobsRepository.getByIdAsync(job_id_str);
 

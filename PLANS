@@ -68,19 +68,19 @@ DONE     paramater:
 DONE         job_id
 
 
-- view performance graphs:
-    parameter:
-        app_bundle_id
-    body:
-        number of days - default = 7
-        device
-        launch_type
-    return jsons for each case:
-        date - launch_time
-        date - memory_usage
-        date - app_size
-        date - install_launch
-        date - install_memory
+DONE - view performance graphs:
+DONE     parameter:
+DONE         app_bundle_id
+DONE     body:
+DONE         number of days - default = 7
+DONE         device
+DONE         launch_type
+DONE     return jsons for each case:
+DONE         date - launch_time
+DONE         date - memory_usage
+DONE         date - app_size
+DONE         date - install_launch
+DONE         date - install_memory
 
 
 
