@@ -127,3 +127,4 @@ A fost aleasa a 2a varianta, pentru ca se considera suficient un singur sample.
 
 [Unreleased]: https://github.com/tanerm98/ProiectIDP/commit/b3857e1dfa94972112aa13f428a4ff4c05b9b0dd
 [0.0.1]: https://github.com/tanerm98/ProiectIDP/commit/b3857e1dfa94972112aa13f428a4ff4c05b9b0dd
+[1.0.0]: https://github.com/tanerm98/ProiectIDP/commit/3f424bf014a8073658808ee8ff925dd2faa17024
