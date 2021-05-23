@@ -1,19 +1,20 @@
 # ProiectIDP
-IDP - Team project. Description: https://docs.google.com/document/d/1H_Lb1h6sSJ57266VyFNLMeeZmbvPm_atO3Zbl5rHPwk/edit?usp=sharing
+    IDP - Team project
+    Description: https://docs.google.com/document/d/1H_Lb1h6sSJ57266VyFNLMeeZmbvPm_atO3Zbl5rHPwk/edit?usp=sharing
 
-Steps for initializing services:
-- database: in Database
-    - docker-compose up
-- Performance Measuring App: in BusinessLogicService
-    - docker-compose up
-- Login Service: in BackendLogicServices/LoginService
-    - docker-compose up
-- Webb App: in BackendLogicServices/AppService
-    - docker-compose up
+## Steps for initializing services
+    Database: cwd = Database
+        $ docker-compose up
+    Performance Measuring App: cwd = BusinessLogicService
+        $ docker-compose up
+    Login Service: cwd = BackendLogicServices/LoginService
+        $ docker-compose up
+    Web App: cwd = BackendLogicServices/AppService
+        $ docker-compose up
     
-REST API Endpoints, Documentation and Usage:
+## REST API Endpoints, Documentation and Usage:
 
-REGISTER
+### REGISTER
     Path: localhost:3003/api/v1/users/register
     Type: POST
     Authorized roles: ADMIN, MANAGER, USER
@@ -30,7 +31,7 @@ REGISTER
             }
         }
     
-LOGIN
+### LOGIN
     Path: localhost:3003/api/v1/users/login
     Type: POST
     Authorized roles: ADMIN, MANAGER, USER
@@ -47,7 +48,7 @@ LOGIN
             }
         }
 
-GET_USERS
+### GET_USERS
     Path: localhost:3003/api/v1/users/
     Type: GET
     Authorized roles: ADMIN
@@ -87,13 +88,13 @@ GET_USERS
             ]
         }
     
-SET_ROLE
+### SET_ROLE
     Path: localhost:3003/api/v1/users/:USER_ID/role/:ROLE_ID
     Type: PUT
     Authorized roles: ADMIN
     Parameters: USER_ID & ROLE_ID
 
-GET_ROLES    
+### GET_ROLES    
     Path: localhost:3003/api/v1/roles
     Type: GET
     Authorized roles: ADMIN
@@ -115,7 +116,7 @@ GET_ROLES
             ]
         }
     
-ADD_ROLE
+### ADD_ROLE
     Path: localhost:3003/api/v1/roles
     Type: POST
     Authorized roles: ADMIN
@@ -131,7 +132,7 @@ ADD_ROLE
             }
         }
     
-CREATE_WORKSPACE
+### CREATE_WORKSPACE
     Path: localhost:3002/api/v1/workspaces/create
     Type:   POST
     Authorized roles: ADMIN, MANAGER
@@ -150,7 +151,7 @@ CREATE_WORKSPACE
             }
         }
 
-GET_WORKSPACE_INFO
+### GET_WORKSPACE_INFO
     Path: localhost:3002/api/v1/workspaces/:APP_BUNDLE_ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
@@ -164,13 +165,13 @@ GET_WORKSPACE_INFO
             }
         }
    
-DELETE_WORKSPACE 
+### DELETE_WORKSPACE 
     Path: localhost:3002/api/v1/workspaces/:APP_BUNDLE_ID
     Type: DELETE
     Authorized roles: ADMIN, MANAGER
     Parameters: APP_BUNDLE_ID
 
-GET_ALL_WORKSPACES    
+### GET_ALL_WORKSPACES    
     Path: localhost:3002/api/v1/workspaces/
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
@@ -200,7 +201,7 @@ GET_ALL_WORKSPACES
             ]
         }
     
-RUN_PERFORMANCE_TEST_JOB
+### RUN_PERFORMANCE_TEST_JOB
     Path: localhost:3002/api/v1/jobs/run/:APP_BUNDLE_ID
     Type: POST
     Authorized roles: ADMIN, MANAGER
@@ -230,7 +231,7 @@ RUN_PERFORMANCE_TEST_JOB
             }
         }
     
-GET_JOBS_FOR_WORKSPACE
+### GET_JOBS_FOR_WORKSPACE
     Path: localhost:3002/api/v1/jobs/bundle/:APP_BUNDLE_ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
@@ -259,7 +260,7 @@ GET_JOBS_FOR_WORKSPACE
             ]
         }
   
-GET_JOB_WITH_ID  
+### GET_JOB_WITH_ID  
     Path: localhost:3002/api/v1/jobs/id/:ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
@@ -274,13 +275,13 @@ GET_JOB_WITH_ID
             }
         }
     
-DELETE_JOB_WITH_ID
+### DELETE_JOB_WITH_ID
     Path: localhost:3002/api/v1/jobs/id/:ID
     Type: DELETE
     Authorized roles: ADMIN, MANAGER
     Parameters: ID
 
-GET_PERFORMANCE_METRICS_FOR_APP    
+### GET_PERFORMANCE_METRICS_FOR_APP    
     Path: localhost:3002/api/v1/metrics/:APP_BUNDLE_ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
@@ -347,7 +348,7 @@ GET_PERFORMANCE_METRICS_FOR_APP
             }
         }
     
-GET_USER_ANALYTICS
+### GET_USER_ANALYTICS
     Path: localhost:3002/api/v1/users/analytics
     Type: GET
     Authorized roles: ADMIN
