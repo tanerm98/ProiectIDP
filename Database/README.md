@@ -24,3 +24,5 @@ Cu kong pui la ruta in loc de localhost:3004/api/.. => localhost:8000/pg/api...
 
 Daca vrei sa rulezi fara kong, si ruta cu localhost:3004/api/.. e valabila
 pentru ca nu i-am sters porturile 3004:3004 serviciului de loginservice-api
+
+OBS: Trebuie mai intai de toate un chmod 777 kong.yml (777 pe toate fisierele kong.yml)
