@@ -50,7 +50,7 @@ services:
      
       
   loginservice-api:
-    image: myimg_3:latest
+    image: lgsvs:latest
     ports:
       - "3003:3003"
     networks:
@@ -108,7 +108,7 @@ services:
       - 3002:3002
       
   measure_performance-py:
-    image: myperf:latest
+    image: bsnsvs:latest
     ports:
       - 3004:3004
     networks:
