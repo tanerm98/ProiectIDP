@@ -1,10 +1,16 @@
 _format_version: "2.1"
 
 services:
-  - name: nume1
-    url: http://loginservice-api:3003/
-    #url: http://pgadmin:80
+  - name: login_service_kong
+    url: http://loginservice-api:3003/api/v1/
     routes:
-      - name: pgadmin
+      - name: login
         paths: 
-          - /
+          - /auth
+
+  - name: app_service_kong
+    url: http://appservice-api:3002/api/v1/
+    routes:
+      - name: app
+        paths:
+          - /app

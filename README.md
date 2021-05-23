@@ -44,13 +44,14 @@
         http://localhost:30001
     LoginService
         http://localhost:3003/api/v1/ - without Kong
-        http://localhost:8000/api/v1/ - with Kong
+        localhost:8000/auth/ - with Kong
     AppService
         http://localhost:3002/api/v1/ - without Kong
+        localhost:8000/app/ - with Kong
         
     
 ### REGISTER
-    Path: localhost:3003/api/v1/users/register
+    Path: LoginService/users/register
     Type: POST
     Authorized roles: ADMIN, MANAGER, USER
     Body:
@@ -67,7 +68,7 @@
         }
     
 ### LOGIN
-    Path: localhost:3003/api/v1/users/login
+    Path: LoginService/users/login
     Type: POST
     Authorized roles: ADMIN, MANAGER, USER
     Body:
@@ -84,7 +85,7 @@
         }
 
 ### GET_USERS
-    Path: localhost:3003/api/v1/users/
+    Path: LoginService/users/
     Type: GET
     Authorized roles: ADMIN
     Returns:
@@ -124,13 +125,13 @@
         }
     
 ### SET_ROLE
-    Path: localhost:3003/api/v1/users/:USER_ID/role/:ROLE_ID
+    Path: LoginService/users/:USER_ID/role/:ROLE_ID
     Type: PUT
     Authorized roles: ADMIN
     Parameters: USER_ID & ROLE_ID
 
 ### GET_ROLES    
-    Path: localhost:3003/api/v1/roles
+    Path: LoginService/roles
     Type: GET
     Authorized roles: ADMIN
     Returns:
@@ -152,7 +153,7 @@
         }
     
 ### ADD_ROLE
-    Path: localhost:3003/api/v1/roles
+    Path: LoginService/roles
     Type: POST
     Authorized roles: ADMIN
     Body:
@@ -168,7 +169,7 @@
         }
     
 ### CREATE_WORKSPACE
-    Path: localhost:3002/api/v1/workspaces/create
+    Path: AppService/workspaces/create
     Type:   POST
     Authorized roles: ADMIN, MANAGER
     Body:
@@ -187,7 +188,7 @@
         }
 
 ### GET_WORKSPACE_INFO
-    Path: localhost:3002/api/v1/workspaces/:APP_BUNDLE_ID
+    Path: AppService/workspaces/:APP_BUNDLE_ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
     Parameters: APP_BUNDLE_ID
@@ -201,13 +202,13 @@
         }
    
 ### DELETE_WORKSPACE 
-    Path: localhost:3002/api/v1/workspaces/:APP_BUNDLE_ID
+    Path: AppService/workspaces/:APP_BUNDLE_ID
     Type: DELETE
     Authorized roles: ADMIN, MANAGER
     Parameters: APP_BUNDLE_ID
 
 ### GET_ALL_WORKSPACES    
-    Path: localhost:3002/api/v1/workspaces/
+    Path: AppService/workspaces/
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
     Returns:
@@ -237,7 +238,7 @@
         }
     
 ### RUN_PERFORMANCE_TEST_JOB
-    Path: localhost:3002/api/v1/jobs/run/:APP_BUNDLE_ID
+    Path: AppService/jobs/run/:APP_BUNDLE_ID
     Type: POST
     Authorized roles: ADMIN, MANAGER
     Parameters: APP_BUNDLE_ID
@@ -267,7 +268,7 @@
         }
     
 ### GET_JOBS_FOR_WORKSPACE
-    Path: localhost:3002/api/v1/jobs/bundle/:APP_BUNDLE_ID
+    Path: AppService/jobs/bundle/:APP_BUNDLE_ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
     Parameters: APP_BUNDLE_ID
@@ -296,7 +297,7 @@
         }
   
 ### GET_JOB_WITH_ID  
-    Path: localhost:3002/api/v1/jobs/id/:ID
+    Path: AppService/jobs/id/:ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
     Parameters: ID
@@ -311,13 +312,13 @@
         }
     
 ### DELETE_JOB_WITH_ID
-    Path: localhost:3002/api/v1/jobs/id/:ID
+    Path: AppService/jobs/id/:ID
     Type: DELETE
     Authorized roles: ADMIN, MANAGER
     Parameters: ID
 
 ### GET_PERFORMANCE_METRICS_FOR_APP    
-    Path: localhost:3002/api/v1/metrics/:APP_BUNDLE_ID
+    Path: AppService/metrics/:APP_BUNDLE_ID
     Type: GET
     Authorized roles: ADMIN, MANAGER, USER
     Parameters: APP_BUNDLE_ID
@@ -384,7 +385,7 @@
         }
     
 ### GET_USER_ANALYTICS
-    Path: localhost:3002/api/v1/users/analytics
+    Path: AppService/users/analytics
     Type: GET
     Authorized roles: ADMIN
     Body:
