@@ -27,7 +27,7 @@ services:
     environment:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: dbpass
-      POSTGRES_DB: book1
+      POSTGRES_DB: performancedb
       TZ: Europe/Bucharest
       PGTZ: Europe/Bucharest
     ports:
@@ -71,7 +71,7 @@ services:
       PORT: 3003
       PGHOST: database_db_1
       PGUSER: dbuser
-      PGDATABASE: book1
+      PGDATABASE: performancedb
       PGPASSWORD: dbpass
       PGPORT: 5432
       JWT_SECRET_KEY: myawesomeultrasecretkey
@@ -96,7 +96,7 @@ services:
       PORT: 3002
       PGHOST: database_db_1
       PGUSER: dbuser
-      PGDATABASE: book1
+      PGDATABASE: performancedb
       PGPASSWORD: dbpass
       PGPORT: 5432
       JWT_SECRET_KEY: myawesomeultrasecretkey

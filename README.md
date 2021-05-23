@@ -30,7 +30,7 @@
     
 ### Setup swarm
     0. $ cd Database 
-    1. $ docker swarm init --advertise-addr 172.18.0.23       # now I hava one manager
+    1. $ docker swarm init      # now I hava one manager
     2. $ ./make_setup.sh        # to create my images
     3. $ chmod 777      # on all kong.yml files (now only in Database/kong folder)
     4. $ docker stack deploy -c docker-compose-all.yml lab5
@@ -39,7 +39,16 @@
 
     
 ## REST API Endpoints, Documentation and Usage:
-
+### Base URLs
+    PGAdmin
+        http://localhost:30001
+    LoginService
+        http://localhost:3003/api/v1/ - without Kong
+        http://localhost:8000/api/v1/ - with Kong
+    AppService
+        http://localhost:3002/api/v1/ - without Kong
+        
+    
 ### REGISTER
     Path: localhost:3003/api/v1/users/register
     Type: POST

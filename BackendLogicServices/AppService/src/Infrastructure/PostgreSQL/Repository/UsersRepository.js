@@ -5,7 +5,7 @@ const {
 const getUserRegisters = async (limit) => {
     console.info(`Getting user registers data from database async...`);
 
-    command = "select today_date, avg(registers) "
+    command = "select today_date, sum(registers) "
     command += "from user_metrics "
     command += "group by today_date "
     command += "order by today_date desc "
@@ -19,7 +19,7 @@ const getUserRegisters = async (limit) => {
 const getUserLogin = async (limit) => {
     console.info(`Getting user logins data from database async...`);
 
-    command = "select today_date, avg(logins) "
+    command = "select today_date, sum(logins) "
     command += "from user_metrics "
     command += "group by today_date "
     command += "order by today_date desc "
@@ -33,7 +33,7 @@ const getUserLogin = async (limit) => {
 const getRunJobs = async (limit) => {
     console.info(`Getting jobs run data from database async...`);
 
-    command = "select today_date, avg(jobs) "
+    command = "select today_date, sum(jobs) "
     command += "from user_metrics "
     command += "group by today_date "
     command += "order by today_date desc "

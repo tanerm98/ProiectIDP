@@ -15,7 +15,7 @@
     
 ## Setup swarm
     0. $ cd Database 
-    1. $ docker swarm init --advertise-addr 172.18.0.23       # now I hava one manager
+    1. $ docker swarm init      # now I hava one manager
     2. $ ./make_setup.sh        # to create my images
     3. $ chmod 777      # on all kong.yml files (now only in Database/kong folder)
     4. $ docker stack deploy -c docker-compose-all.yml lab5
