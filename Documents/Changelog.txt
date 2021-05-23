@@ -6,7 +6,35 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-
+## [Beta]
+## [1.0.0] - 2021-05-23
+### Changed
+* Taner
+   * spart aplicatia in servicii separate
+      * authorization service
+      * app service
+      * business logic service
+      * database
+      * utilitare gestiune database
+   * mockuit business logic
+      * se foloseste de tool-uri de Apple (XCode si CommandLineTools), care nu pot rula in Docker
+      * am mockuit acele apeluri si am trecut direct rezultatul rularii lor
+### Added
+* Taner
+   * business logic finalizat, Flask app si Docker pentru business logic
+* Corina & Teodor - team work si peer programming intensiv
+   * research despre
+      * swarm
+      * kong
+      * portainer
+   * implementare si debug Swarm, Kong si Portainer
+   * aceste 2 parti au durat, in total, 3 zile, au fost multe bug-uri, probleme greu de identificat/rezolvat, dar am reusit
+   * efortul nu se vede, din pacate, in commiturile din Github - de aceea am mentionat aici
+* Corina, Teodor & Taner - team work si peer programming
+   * implementat rute pentru aplicatie
+      * 16 rute in total
+* Teodor
+   * testare aplicatie, functionalitati, corner cases etc
 
 ## [Unreleased]
 ## [0.0.1] - 2021-05-09
