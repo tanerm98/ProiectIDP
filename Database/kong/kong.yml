@@ -1,0 +1,10 @@
+_format_version: "2.1"
+
+services:
+  - name: nume1
+    url: http://loginservice-api:3003/
+    #url: http://pgadmin:80
+    routes:
+      - name: pgadmin
+        paths: 
+          - /

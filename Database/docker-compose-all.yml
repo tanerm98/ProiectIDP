@@ -1,0 +1,191 @@
+version: "3.7"
+
+services:
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "30001:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: test@test.com
+      PGADMIN_DEFAULT_PASSWORD: test
+    networks:
+      - pg_network
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    hostname: database_pgadmin_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpass
+      POSTGRES_DB: book1
+      TZ: Europe/Bucharest
+      PGTZ: Europe/Bucharest
+    ports:
+      - "5432:5432"
+    volumes:
+      - lab6_pgdb:/var/lib/postgresql/data
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - lab5network
+      - pg_network
+    hostname: database_db_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+     
+      
+  loginservice-api:
+    image: myimg_3:latest
+    ports:
+      - "3003:3003"
+    networks:
+      - lab5network
+    #depends_on:
+    #  - 'db'
+    #env_file: ./.env
+    hostname: database_loginservice-api_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+    environment:
+      NODE_ENV: development
+      PORT: 3003
+      PGHOST: database_db_1
+      PGUSER: dbuser
+      PGDATABASE: book1
+      PGPASSWORD: dbpass
+      PGPORT: 5432
+      JWT_SECRET_KEY: myawesomeultrasecretkey
+      JWT_ISSUER: 'pw backend'
+      JWT_SUBJECT: 'pw'
+      JWT_AUDIENCE: 'pw client'
+      
+  appservice-api:
+    image: appsvs:latest
+    networks:
+      - lab5network
+    hostname: database_appservice-api_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+    environment:
+      NODE_ENV: development
+      PORT: 3002
+      PGHOST: database_db_1
+      PGUSER: dbuser
+      PGDATABASE: book1
+      PGPASSWORD: dbpass
+      PGPORT: 5432
+      JWT_SECRET_KEY: myawesomeultrasecretkey
+      JWT_ISSUER: 'pw backend'
+      JWT_SUBJECT: 'pw'
+      JWT_AUDIENCE: 'pw client'
+      BUSINESSHOST: database_measure_performance-py_1
+    ports:
+      - 3002:3002
+      
+  measure_performance-py:
+    image: myperf:latest
+    ports:
+      - 3004:3004
+    networks:
+      - lab5network
+    hostname: database_measure_performance-py_1
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      restart_policy:
+        condition: on-failure
+      
+  kong:
+    image: kong:latest
+    volumes:
+      - ./kong:/usr/local/kong/declarative #injectarea fisierului de configurare la calea specificata
+    environment:
+      KONG_DATABASE: 'off' #obligatoriu, daca se vrea modul DB-less
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/declarative/kong.yml #trebuie specificat unde anume se va gasi fisierul de configurare
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001, 0.0.0.0:8444 ssl
+    ports:
+      - 8000:8000 #expunerea porturilor
+      - 8443:8443
+    deploy:
+      placement:
+        constraints: [node.role == manager] #constrangerea de rulare doar pe master, pentru a nu exista conflict la nivel de volume
+      restart_policy:
+        condition: on-failure
+    networks:
+      - lab5network
+      
+  portainer:
+    image: portainer/portainer
+    command: -H tcp://tasks.agent:9001 --tlsskipverify --admin-password-file /run/secrets/portainer-password
+    ports:
+      - "9000:9000"
+      - "8002:8002"
+    volumes:
+      - portainer_data:/data
+    networks:
+      - portainer_network
+      - lab5network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+
+  agent:
+    image: portainer/agent
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - portainer_network
+      - lab5network
+    deploy:
+      mode: global
+      placement:
+        constraints: 
+            - "node.platform.os == linux"
+            - "node.role == manager"
+
+volumes:
+  lab6_pgdb:
+  pgadmin-data:
+  portainer_data:
+  
+networks:
+  lab5network:
+  portainer_network:
+  pg_network:
+#    driver: over
